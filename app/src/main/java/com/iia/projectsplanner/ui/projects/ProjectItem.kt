@@ -2,6 +2,7 @@ package com.iia.projectsplanner.ui.projects
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ContentAlpha
@@ -31,7 +32,8 @@ fun ProjectItem(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(80.dp)
+            .clickable {  }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -40,16 +42,16 @@ fun ProjectItem(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
-            ProjectAvatar()
-            Column(verticalArrangement = Arrangement.SpaceEvenly) {
+            ProjectAvatar(imageUrl = "not")
+            Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxHeight()) {
                 Text(
                     text = "Call Blocker",
-                    fontFamily = MaterialTheme.typography.bodyLarge.fontFamily
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
                 )
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.disabled) {
                     Text(
                         text = "Call blocker allows you to block contacts logs spam and numbers from calling you",
-                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
+                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -64,12 +66,12 @@ fun ProjectAvatar(imageUrl: String? = null, name: String? = null) {
     val density = LocalDensity.current
     val primary = MaterialTheme.colorScheme.primary
     val outline = MaterialTheme.colorScheme.outline.copy(.10f)
-    val arcBorderSize = with(density) { 4.dp.toPx() }
+    val arcBorderSize = with(density) { 6.dp.toPx() }
 
     Box(
         modifier = Modifier
-            .size(56.dp)
-            .padding(2.dp)
+            .size(72.dp)
+            .padding(3.dp)
             .drawBehind {
                 drawArc(
                     color = primary,
@@ -88,19 +90,19 @@ fun ProjectAvatar(imageUrl: String? = null, name: String? = null) {
             },
         contentAlignment = Alignment.Center
     ) {
-        Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center) {
             if (!imageUrl.isNullOrEmpty()) {
                 Image(
                     painter = painterResource(id = R.mipmap.nejat),
                     contentDescription = "Project Icon",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(56.dp)
                         .clip(CircleShape)
                 )
             } else {
                 if (!name.isNullOrEmpty()) {
-                    TextDrawable(name = name, modifier = Modifier.size(40.dp))
+                    TextDrawable(name = name, modifier = Modifier.size(56.dp))
                 }
             }
         }
