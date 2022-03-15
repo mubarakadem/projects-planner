@@ -1,4 +1,5 @@
-package com.example.compose
+package com.iia.projectsplanner.ui.theme
+
 import androidx.compose.ui.graphics.Color
 
 
@@ -28,7 +29,7 @@ val md_theme_light_outline = Color(0xFF79747E)
 val md_theme_light_inverseOnSurface = Color(0xFFF4EFF4)
 val md_theme_light_inverseSurface = Color(0xFF313033)
 val md_theme_light_inversePrimary = Color(0xFFD0BCFF)
-val md_theme_light_shadow = Color(0xFF000000)
+//val md_theme_light_shadow = Color(0xFF000000)
 
 val md_theme_dark_primary = Color(0xFFD0BCFF)
 val md_theme_dark_onPrimary = Color(0xFF381E72)
@@ -56,9 +57,9 @@ val md_theme_dark_outline = Color(0xFF938F99)
 val md_theme_dark_inverseOnSurface = Color(0xFF1C1B1F)
 val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
 val md_theme_dark_inversePrimary = Color(0xFF6750A4)
-val md_theme_dark_shadow = Color(0xFF000000)
-
-
-
-val seed = Color(0xFF6750A4)
-val error = Color(0xFFB3261E)
+//val md_theme_dark_shadow = Color(0xFF000000)
+//
+//
+//
+//val seed = Color(0xFF6750A4)
+//val error = Color(0xFFB3261E)
