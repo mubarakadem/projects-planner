@@ -2,8 +2,9 @@ package com.iia.projectsplanner.common.data.model
 
 import androidx.paging.PagingSource
 import androidx.room.*
+import com.iia.projectsplanner.util.TABLE_TASKS
 
-@Entity(tableName = "tasks")
+@Entity(tableName = TABLE_TASKS)
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
