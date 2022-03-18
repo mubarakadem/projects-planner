@@ -11,8 +11,10 @@ import androidx.compose.ui.Modifier
 import com.iia.projectsplanner.ui.projects.NavGraphs
 import com.iia.projectsplanner.ui.theme.AppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalMaterial3Api
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
