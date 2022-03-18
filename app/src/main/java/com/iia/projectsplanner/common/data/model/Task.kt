@@ -20,7 +20,7 @@ data class Task(
     val notes: String? = null,
 ){
     @Dao
-    interface TaskDao{
+    interface TasksDao{
 
         @Query("SELECT * FROM tasks WHERE project_id = :projectId")
         fun getAllTasks(projectId: Int): PagingSource<Int, List<Task>>

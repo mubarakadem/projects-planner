@@ -8,5 +8,5 @@ import com.iia.projectsplanner.common.data.model.Task
 @Database(entities = [Project::class, Task::class], version = 1)
 abstract class ProjectsPlannerDatabase: RoomDatabase() {
     abstract fun projectsDao(): Project.ProjectsDao
-    abstract fun tasksDao(): Task.TaskDao
+    abstract fun tasksDao(): Task.TasksDao
 }
