@@ -84,11 +84,11 @@ fun AppTheme(
 
 //data class CustomColor(val name:String, val color: Color, val harmonized: Boolean, var roles: ColorRoles)
 //data class ExtendedColors(val colors: Array<CustomColor>)
-
-
+//
+//
 //fun setupErrorColors(colorScheme: ColorScheme, isLight: Boolean): ColorScheme {
 //    val harmonizedError =
-//        MaterialColors.harmonize(error, colorScheme.primary)
+//        MaterialColors.harmonize(error, colorScheme.primary.toArgb())
 //    val roles = MaterialColors.getColorRoles(harmonizedError, isLight)
 //    //returns a colorScheme with newly harmonized error colors
 //    return colorScheme.copy(
@@ -112,7 +112,7 @@ fun AppTheme(
 //        // Blend or not
 //        if (shouldHarmonize) {
 //            val blendedColor =
-//                MaterialColors.harmonize(customColor.color, colorScheme.primary)
+//                MaterialColors.harmonize(customColor.color, colorScheme.primary.toArgb())
 //            customColor.roles = MaterialColors.getColorRoles(blendedColor, isLight)
 //        } else {
 //            customColor.roles = MaterialColors.getColorRoles(customColor.color, isLight)

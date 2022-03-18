@@ -1,5 +1,6 @@
 package com.iia.projectsplanner.ui.projects
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,12 +29,12 @@ import com.iia.projectsplanner.R
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProjectItem(modifier: Modifier = Modifier) {
+fun ProjectItem(modifier: Modifier = Modifier, @FloatRange(from = 0.0, to = 360.0) progress: Float = 270f) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
-            .clickable {  }
+            .clickable { }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -42,8 +43,11 @@ fun ProjectItem(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
-            ProjectAvatar(imageUrl = "not")
-            Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxHeight()) {
+            ProjectAvatar(imageUrl = "not", progress = progress)
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxHeight()
+            ) {
                 Text(
                     text = "Call Blocker",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize
@@ -62,7 +66,11 @@ fun ProjectItem(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ProjectAvatar(imageUrl: String? = null, name: String? = null) {
+fun ProjectAvatar(
+    imageUrl: String? = null,
+    name: String? = null,
+    @FloatRange(from = 0.0, to = 360.0) progress: Float = 270f
+) {
     val density = LocalDensity.current
     val primary = MaterialTheme.colorScheme.primary
     val outline = MaterialTheme.colorScheme.outline.copy(.10f)
@@ -77,7 +85,7 @@ fun ProjectAvatar(imageUrl: String? = null, name: String? = null) {
                     color = primary,
                     useCenter = false,
                     startAngle = 270f,
-                    sweepAngle = 270f,
+                    sweepAngle = progress,
                     style = Stroke(width = arcBorderSize)
                 )
                 drawArc(
