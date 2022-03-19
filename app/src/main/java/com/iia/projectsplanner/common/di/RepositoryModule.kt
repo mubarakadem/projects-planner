@@ -1,8 +1,8 @@
 package com.iia.projectsplanner.common.di
 
 import com.iia.projectsplanner.common.data.local.ProjectsRepositoryImpl
-import com.iia.projectsplanner.common.data.local.ProjectsRepository
-import com.iia.projectsplanner.common.data.local.TasksRepository
+import com.iia.projectsplanner.common.domain.repositories.ProjectsRepository
+import com.iia.projectsplanner.common.domain.repositories.TasksRepository
 import com.iia.projectsplanner.common.data.local.TasksRepositoryImpl
 import dagger.Binds
 import dagger.Module

@@ -1,8 +1,8 @@
-package com.iia.projectsplanner.common.data.model
+package com.iia.projectsplanner.common.domain.model
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.iia.projectsplanner.util.TABLE_PROJECTS
+import com.iia.projectsplanner.common.util.TABLE_PROJECTS
 
 @Entity(tableName = TABLE_PROJECTS)
 data class Project(
@@ -17,7 +17,7 @@ data class Project(
     @Dao
     interface ProjectsDao{
         @Query("SELECT * FROM projects")
-        fun getAllProjects(): PagingSource<Int, List<Project>>
+        fun getAllProjects(): PagingSource<Int, Project>
 
         @Insert
         suspend fun insert(project: Project)

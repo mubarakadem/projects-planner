@@ -3,7 +3,7 @@ package com.iia.projectsplanner.common.di
 import android.content.Context
 import androidx.room.Room
 import com.iia.projectsplanner.common.data.db.ProjectsPlannerDatabase
-import com.iia.projectsplanner.util.DB_NAME
+import com.iia.projectsplanner.common.util.DB_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

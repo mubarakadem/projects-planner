@@ -1,4 +1,4 @@
-package com.iia.projectsplanner.util
+package com.iia.projectsplanner.common.util
 
 const val PACKAGES_ROUTE = "packagesRoute"
 
