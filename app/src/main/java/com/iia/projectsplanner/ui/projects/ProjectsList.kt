@@ -3,6 +3,7 @@ package com.iia.projectsplanner.ui.projects
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -13,27 +14,30 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.iia.projectsplanner.common.util.PACKAGES_ROUTE
+import com.iia.projectsplanner.common.ui.TopBarTitle
+import com.iia.projectsplanner.common.util.PROJECTS_ROUTE
+import com.iia.projectsplanner.ui.destinations.AddProjectDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@ExperimentalMaterialApi
 @ExperimentalMaterial3Api
-@Destination(route = PACKAGES_ROUTE, start = true)
+@Destination(route = PROJECTS_ROUTE, start = true)
 @Composable
-fun ProjectsList(projectsViewModel: ProjectsViewModel = viewModel()) {
+fun ProjectsList(
+    projectsViewModel: ProjectsViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
+) {
     val projects = projectsViewModel.projects.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = "Projects",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = MaterialTheme.typography.headlineSmall.fontSize
-                    )
+                    TopBarTitle("Projects")
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -75,7 +79,9 @@ fun ProjectsList(projectsViewModel: ProjectsViewModel = viewModel()) {
                 }
             }
             FloatingActionButton(
-                onClick = { },
+                onClick = {
+                    navigator.navigate(AddProjectDestination)
+                },
                 containerColor = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

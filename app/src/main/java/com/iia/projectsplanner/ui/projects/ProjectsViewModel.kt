@@ -17,9 +17,4 @@ class ProjectsViewModel @Inject constructor(private val projectsRepository: Proj
         projectsRepository.getAllProjects()
     }.flow.cachedIn(viewModelScope)
 
-    fun insert(project: Project){
-        viewModelScope.launch {
-            projectsRepository.insert(project)
-        }
-    }
 }

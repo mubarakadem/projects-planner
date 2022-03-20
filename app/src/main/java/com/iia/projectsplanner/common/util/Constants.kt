@@ -1,6 +1,6 @@
 package com.iia.projectsplanner.common.util
 
-const val PACKAGES_ROUTE = "packagesRoute"
+const val PROJECTS_ROUTE = "projectsRoute"
 
 const val DB_NAME = "projects_db"
 const val TABLE_PROJECTS = "projects"

@@ -20,12 +20,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += [ "room.schemaLocation" : "$projectDir/shemas".toString() ]
-            }
-        }
     }
 
     buildTypes {
@@ -65,6 +59,10 @@ kotlin {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas".toString())
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -91,6 +89,7 @@ dependencies {
 
     //Hilt
     implementation "com.google.dagger:hilt-android:2.39"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     kapt "com.google.dagger:hilt-compiler:2.38.1"
 
     testImplementation 'junit:junit:4.13.2'
