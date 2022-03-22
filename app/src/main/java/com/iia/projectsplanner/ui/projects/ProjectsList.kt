@@ -32,6 +32,7 @@ fun ProjectsList(
     navigator: DestinationsNavigator
 ) {
     val projects = projectsViewModel.projects.collectAsLazyPagingItems()
+    val uiState = rememberProjectState()
 
     Scaffold(
         topBar = {
@@ -73,7 +74,7 @@ fun ProjectsList(
                 ) {
                     items(projects) {
                         if (it != null) {
-                            ProjectItem(it)
+                            ProjectItem(it, uiState)
                         }
                     }
                 }

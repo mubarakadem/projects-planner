@@ -97,12 +97,12 @@ fun AddProject(
                 actions = {
                     IconButton(onClick = {
                         if (bitmap.value != null && iconUri?.path != null) {
-                            val fileName = "${System.currentTimeMillis()}"
+                            val fileName = "${System.currentTimeMillis()}.jpeg"
                             val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
                             bitmap.value!!.compress(Bitmap.CompressFormat.JPEG, 100, FileOutputStream(file))
-                            addProjectViewModel.insert(Project(name = uiState.name, icon = fileName, version = uiState.version, description = uiState.description))
+                            addProjectViewModel.insert(Project(name = uiState.name, icon = fileName, version = uiState.version, description = uiState.description, progress = 42f))
                         } else {
-                            addProjectViewModel.insert(Project(name = uiState.name, version = uiState.version, description = uiState.description))
+                            addProjectViewModel.insert(Project(name = uiState.name, version = uiState.version, description = uiState.description, progress = 75f))
                         }
                         navigator.popBackStack()
                     }) {

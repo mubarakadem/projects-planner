@@ -1,5 +1,6 @@
 package com.iia.projectsplanner.ui.projects
 
+import android.os.Environment
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,49 +11,53 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.iia.projectsplanner.R
 import com.iia.projectsplanner.common.domain.model.Project
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProjectItem(project: Project, modifier: Modifier = Modifier) {
+fun ProjectItem(project: Project, uiState: ProjectsState, modifier: Modifier = Modifier) {
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clickable {  }
+            .clickable { }
     ) {
-        ProjectAvatar(imageUrl = project.icon, progress = project.progress)
+        ProjectAvatar(uiState = uiState, icon = project.icon, progress = project.progress)
         Text(
             text = project.name,
-            fontSize = MaterialTheme.typography.bodyLarge.fontSize
+            fontSize = MaterialTheme.typography.headlineLarge.fontSize
         )
     }
 }
 
 @Composable
 fun ProjectAvatar(
-    imageUrl: String? = null,
-    name: String? = null,
-    @FloatRange(from = 0.0, to = 360.0) progress: Float = 270f
+    uiState: ProjectsState,
+    name: String = "",
+    icon: String? = null,
+    @FloatRange(from = 0.0, to = 360.0) progress: Float
 ) {
+    val context = LocalContext.current
     val density = LocalDensity.current
     val primary = MaterialTheme.colorScheme.primary
     val outline = MaterialTheme.colorScheme.outline.copy(.10f)
     val arcBorderSize = with(density) { 6.dp.toPx() }
+    val angle = derivedStateOf { progress / 100 * 360 }
 
     Box(
         modifier = Modifier
@@ -63,7 +68,7 @@ fun ProjectAvatar(
                     color = primary,
                     useCenter = false,
                     startAngle = 270f,
-                    sweepAngle = progress,
+                    sweepAngle = angle.value,
                     style = Stroke(width = arcBorderSize)
                 )
                 drawArc(
@@ -77,9 +82,12 @@ fun ProjectAvatar(
         contentAlignment = Alignment.Center
     ) {
         Box(modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center) {
-            if (!imageUrl.isNullOrEmpty()) {
+            if (!icon.isNullOrEmpty()) {
                 Image(
-                    painter = painterResource(id = R.mipmap.nejat),
+                    bitmap = uiState.getBitmap(
+                        parent = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath,
+                        child = icon
+                    ),
                     contentDescription = "Project Icon",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -87,7 +95,7 @@ fun ProjectAvatar(
                         .clip(CircleShape)
                 )
             } else {
-                if (!name.isNullOrEmpty()) {
+                if (name.isNotEmpty()) {
                     TextDrawable(name = name, modifier = Modifier.size(56.dp))
                 }
             }
@@ -118,13 +126,16 @@ fun TextDrawable(name: String, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun ProjectItemPreview() {
-    ProjectItem(project = Project(name = "Call Blocker", progress = 125f))
+    ProjectItem(
+        project = Project(name = "Call Blocker", progress = 125f),
+        uiState = rememberProjectState()
+    )
 }
 
 @Preview
 @Composable
 fun ProjectAvatarPreview() {
-    ProjectAvatar(imageUrl = "vf")
+    ProjectAvatar(uiState = rememberProjectState(), icon = "vf", progress = 270f)
 }
 
 @Preview
