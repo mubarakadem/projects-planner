@@ -1,7 +1,16 @@
 package com.iia.projectsplanner.ui.addproject
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,13 +24,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -31,6 +40,11 @@ import com.iia.projectsplanner.common.domain.model.Project
 import com.iia.projectsplanner.common.ui.TopBarTitle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
@@ -41,6 +55,27 @@ fun AddProject(
     navigator: DestinationsNavigator
 ) {
     val uiState: AddProjectState = rememberAddProjectState()
+    val context = LocalContext.current
+    var iconUri by remember { mutableStateOf<Uri?>(null) }
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
+            iconUri = it
+        }
+
+    LaunchedEffect(key1 = iconUri) {
+        iconUri?.let {
+            if (Build.VERSION.SDK_INT <= 28) {
+                bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+
+            } else {
+                withContext(Dispatchers.IO) {
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
+                    bitmap.value = ImageDecoder.decodeBitmap(source)
+                }
+            }
+        }
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -61,7 +96,14 @@ fun AddProject(
                 },
                 actions = {
                     IconButton(onClick = {
-                        addProjectViewModel.insert(Project(name = uiState.name))
+                        if (bitmap.value != null && iconUri?.path != null) {
+                            val fileName = "${System.currentTimeMillis()}"
+                            val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
+                            bitmap.value!!.compress(Bitmap.CompressFormat.JPEG, 100, FileOutputStream(file))
+                            addProjectViewModel.insert(Project(name = uiState.name, icon = fileName, version = uiState.version, description = uiState.description))
+                        } else {
+                            addProjectViewModel.insert(Project(name = uiState.name, version = uiState.version, description = uiState.description))
+                        }
                         navigator.popBackStack()
                     }) {
                         Icon(
@@ -84,19 +126,35 @@ fun AddProject(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(76.dp)
-                        .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
-                        .graphicsLayer(shadowElevation = 4f, clip = false, shape = CircleShape)
-                ) {
+                if (bitmap.value == null) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .size(76.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = CircleShape
+                            )
+                            .clickable {
+                                launcher.launch("image/*")
+                            }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.gallery_picker_selected),
+                            contentDescription = "Pick Image from gallery",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(32.dp)
+                        )
+                    }
+                } else {
                     Image(
-                        painter = painterResource(id = R.drawable.gallery_picker_selected),
-                        contentDescription = "Pick Image from gallery",
+                        bitmap = bitmap.value!!.asImageBitmap(),
+                        contentDescription = "Selected Icon",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(76.dp)
+                            .clip(CircleShape)
                     )
                 }
 
